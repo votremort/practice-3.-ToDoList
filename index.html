@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+  <title>To-Do List</title>
+</head>
+<body>
+  <div class="container">
+    <div class="title">To-Do List</div>
+    <div class="input-container">
+      <input id="newTodo" type="text" placeholder="Введите новую задачу"/>
+      <button id="addTodo">Добавить задачу</button>
+    </div>
+    <div class="todo-list" id="todoList">
+      <!-- <div class="todo-container">
+        <label class="label">
+          <input type="checkbox" id="checkbox"/> 
+          <p class="text-todo">Пример</p>
+        </label>
+        <div class="btn-container">
+          <button id="reminder">
+            <img src="./icons/напоминание-24.svg"/>
+          </button>
+          <button id="deleteTodo">Удалить</button>
+        </div>
+      </div> -->
+    </div>
+    <div class="filter-container">
+      <button id="allTodo">Все задачи</button>
+      <button id="completedTodo">Выполненные задачи</button>
+      <button id="uncompletedTodo">Невыполненные задачи</button>
+    </div>
+  </div>
+  <script src="./script.js"></script>
+</body>
+</html>
