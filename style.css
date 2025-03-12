@@ -74,7 +74,7 @@ body {
   justify-content: space-between;
 }
 .label{
-  max-width: 200px;
+  max-width: 570px;
   width: 100%;
   padding: 0px 10px;
   align-items: center;
@@ -162,4 +162,6 @@ body {
 }
 .text-todo{
   margin: 0px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }

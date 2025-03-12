@@ -1,13 +1,19 @@
+import { addTodo, toggleTodo, deleteTodo } from "./functions/actionWithTodo";
 const addTodoBtn = document.getElementById('addTodo');
 const allTodoBtn = document.getElementById('allTodo');
 const completedTodoBtn = document.getElementById('completedTodo');
 const uncompletedTodoBtn = document.getElementById('uncompletedTodo');
+const newTodoInput = document.getElementById('newTodo');
 
 //получение задач с сервера
 async function fetchTodos() {
-  const response = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=10');
-  const todos = await response.json()
-  return todos;
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=10');
+    return await response.json();
+  } catch (error) {
+    alert('Ошибка при получении данных: ', error);
+  }
+
 }
 
 //сохранение задач в localStorage
@@ -45,21 +51,27 @@ function displayTodos(todos) {
   });
 }
 
-//Добавление новой задачи
-function addTodo() {
-  const newTodoInput = document.getElementById('newTodo');
-  const newTodo = {
-    id: Date.now(),
-    title: newTodoInput.value,
-    completed: false,
-    reminder: false
-  };
-  const todos = getTodos();
-  todos.unshift(newTodo);
-  saveTodos(todos);
-  displayTodos(todos);
-  newTodoInput.value = '';
-}
+// //Добавление новой задачи
+// function addTodo() {
+//   if (!newTodoInput.value) {
+//     alert('Введите текст задачи!');
+//     return
+//   }
+//   const newTodo = {
+//     id: Date.now(),
+//     title: newTodoInput.value,
+//     completed: false,
+//     reminder: {
+//       time: 0,
+//       active: false
+//     }
+//   };
+//   const todos = getTodos();
+//   todos.unshift(newTodo);
+//   saveTodos(todos);
+//   displayTodos(todos);
+//   newTodoInput.value = '';
+// }
 
 addTodoBtn.addEventListener('click', addTodo);
 
@@ -87,12 +99,25 @@ function setReminder(id) {
   if (seconds) {
     const todos = getTodos();
     const todo = todos.find(t => t.id === id);
-    todo.reminder = true;
+    todo.reminder = {time: seconds, active: true};
     saveTodos(todos);
     setTimeout(() => {
       alert(`Пора выполнить задачу: ${todo.title}`);
     }, seconds * 1000);
   }
+}
+
+//проверка напоминания при загрузке
+function checkReminders() {
+  const todos = getTodos();
+  todos.forEach(todo => {
+    if (todo.reminder && todo.reminder.active) {
+      const timeLeft = todo.reminder.time * 1000;
+      setTimeout(() => {
+        alert(`Пора выполнить задачу: ${todo.title}`)
+      }, timeLeft)
+    }
+  });
 }
 
 //фильтрация задач
@@ -126,5 +151,6 @@ window.onload = async () => {
   }
 
   displayTodos(todosToDisplay); 
+  checkReminders()
 };
 
