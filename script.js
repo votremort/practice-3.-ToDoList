@@ -1,4 +1,3 @@
-import { addTodo, toggleTodo, deleteTodo } from "./functions/actionWithTodo";
 const addTodoBtn = document.getElementById('addTodo');
 const allTodoBtn = document.getElementById('allTodo');
 const completedTodoBtn = document.getElementById('completedTodo');
@@ -37,11 +36,15 @@ function displayTodos(todos) {
       <label class="label">
           <input type="checkbox" ${todo.completed ? 'checked' : ''} 
           onchange="toggleTodo(${todo.id})" id="checkbox"/> 
-          <p class="text-todo" style="text-decoration:${todo.completed ? 'line-through' : 'none'}">${todo.title}</p>
+          <p class="text-todo" style="text-decoration:${todo.completed ? 'line-through' : 'none'} "onclick=editTodoTitle(${todo.id})">${todo.title}</p>
         </label>
         <div class="btn-container">
+        <button id="edit" onclick="editTodoTitle(${todo.id})">
+            <img src="./icons/редактировать.svg"
+            ${todo.completed ? 'style="display:none;"' : ''}/>
+          </button>
           <button id="reminder" onclick="setReminder(${todo.id})">
-            <img src="./icons/напоминание-24.svg"
+            <img src="./icons/напоминание-24.svg""
             ${todo.completed ? 'style="display:none;"' : ''}/>
           </button>
           <button id="deleteTodo" onclick="deleteTodo(${todo.id})">Удалить</button>
@@ -51,29 +54,42 @@ function displayTodos(todos) {
   });
 }
 
-// //Добавление новой задачи
-// function addTodo() {
-//   if (!newTodoInput.value) {
-//     alert('Введите текст задачи!');
-//     return
-//   }
-//   const newTodo = {
-//     id: Date.now(),
-//     title: newTodoInput.value,
-//     completed: false,
-//     reminder: {
-//       time: 0,
-//       active: false
-//     }
-//   };
-//   const todos = getTodos();
-//   todos.unshift(newTodo);
-//   saveTodos(todos);
-//   displayTodos(todos);
-//   newTodoInput.value = '';
-// }
+//Добавление новой задачи
+function addTodo() {
+  if (!newTodoInput.value) {
+    alert('Введите текст задачи!');
+    return
+  }
+  const newTodo = {
+    id: Date.now(),
+    title: newTodoInput.value,
+    completed: false,
+    reminder: {
+      time: 0,
+      active: false
+    }
+  };
+  const todos = getTodos();
+  todos.unshift(newTodo);
+  saveTodos(todos);
+  displayTodos(todos);
+  newTodoInput.value = '';
+}
 
 addTodoBtn.addEventListener('click', addTodo);
+
+//редактирование текста задачи
+function editTodoTitle(id) {
+  const todos = getTodos();
+  const todo = todos.find(t => t.id === id );
+  const newTitle = prompt('Введите новое название задачи:', todo.title);
+
+  if(newTitle !== null && newTitle.trim() !== '') {
+    todo.title = newTitle.trim();
+    saveTodos(todos);
+    displayTodos(todos)
+  }
+}
 
 //переключение  статуса задачи
 function toggleTodo(id) {
@@ -112,6 +128,11 @@ function checkReminders() {
   const todos = getTodos();
   todos.forEach(todo => {
     if (todo.reminder && todo.reminder.active) {
+      if (todo.completed) {
+        todo.reminder.time = 0;
+        todo.reminder.active = false;
+        return
+      }
       const timeLeft = todo.reminder.time * 1000;
       setTimeout(() => {
         alert(`Пора выполнить задачу: ${todo.title}`)

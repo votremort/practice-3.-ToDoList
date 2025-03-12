@@ -74,12 +74,12 @@ body {
   justify-content: space-between;
 }
 .label{
-  max-width: 570px;
+  max-width: 530px;
   width: 100%;
   padding: 0px 10px;
   align-items: center;
 }
-#reminder{
+#reminder, #edit{
   background-color: #b1d8e7;
   border: none;
   max-height: 32px;
